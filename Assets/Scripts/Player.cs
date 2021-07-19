@@ -13,12 +13,21 @@ public class Player : MonoBehaviour
 
     public static Player instance; 
 
+    AudioSource destructionAudio;
+
+    public AudioClip destructionClip;
+
+    public Text destructionText;
+    public Text pointsText;
+    public int points = 0;
+
     private Rigidbody2D rb;
     public float speed;
 
     private void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
+        destructionAudio = GetComponent<AudioSource>();
 
         if (instance == null) 
             instance = this;
@@ -27,13 +36,17 @@ public class Player : MonoBehaviour
     //method for damage proceccing by 'Player'
     public void GetDamage(int damage)   
     {
+
         Destruction();
     }    
-
+    
     //'Player's' destruction procedure
     void Destruction()
     {
-        Instantiate(destructionFX, transform.position, Quaternion.identity); //generating destruction visual effect and destroying the 'Player' object
+        destructionText.text = "Game Over";
+        destructionAudio.clip = destructionClip;
+        destructionAudio.Play();
+        Instantiate(destructionFX, transform.position, Quaternion.identity); //generating destruction visual effect and destroying the 'Player' object 
         Destroy(gameObject);
     }
 

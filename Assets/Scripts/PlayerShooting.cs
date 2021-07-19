@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 
 //guns objects in 'Player's' hierarchy
@@ -31,6 +32,11 @@ public class PlayerShooting : MonoBehaviour {
     bool shootingIsActive = true; 
     [HideInInspector] public int maxweaponPower = 4; 
     public static PlayerShooting instance;
+    AudioSource shootingAudio;
+    public AudioClip chargingClip;
+    public Text pointsText;
+    public int points = 0;
+    public Text winText;
 
     private void Awake()
     {
@@ -43,17 +49,27 @@ public class PlayerShooting : MonoBehaviour {
         guns.leftGunVFX = guns.leftGun.GetComponent<ParticleSystem>();
         guns.rightGunVFX = guns.rightGun.GetComponent<ParticleSystem>();
         guns.centralGunVFX = guns.centralGun.GetComponent<ParticleSystem>();
+        shootingAudio = GetComponent<AudioSource>();
     }
 
     private void Update()
     {
         if (shootingIsActive)
         {
-            if (Time.time > nextFire)
+            if (Time.time > nextFire && points != 500)
             {
                 MakeAShot();                                                         
                 nextFire = Time.time + 1 / fireRate;
+                shootingAudio.clip = chargingClip;
+                shootingAudio.Play();
+                points += 5;
+                pointsText.text = points.ToString();
             }
+
+        }
+
+        if (points == 500) {
+            winText.text = "Ganaste \nPresiona X para reiniciar";
         }
     }
 
