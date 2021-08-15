@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 
 //guns objects in 'Player's' hierarchy
@@ -37,6 +38,7 @@ public class PlayerShooting : MonoBehaviour {
     public Text pointsText;
     public int points = 0;
     public Text winText;
+    public int limit;
 
     private void Awake()
     {
@@ -50,6 +52,14 @@ public class PlayerShooting : MonoBehaviour {
         guns.rightGunVFX = guns.rightGun.GetComponent<ParticleSystem>();
         guns.centralGunVFX = guns.centralGun.GetComponent<ParticleSystem>();
         shootingAudio = GetComponent<AudioSource>();
+    }
+
+    public void sceneMenu() {
+        SceneManager.LoadScene("Instrucciones");
+    }
+
+    public void sceneLevel2() {
+        SceneManager.LoadScene("Level2");
     }
 
     private void Update()
@@ -68,8 +78,14 @@ public class PlayerShooting : MonoBehaviour {
 
         }
 
-        if (points == 500) {
-            winText.text = "Ganaste \nPresiona X para reiniciar";
+        if (points == limit) {
+            if(limit == 500) {
+                winText.text = "Level 2";
+                sceneLevel2();
+            }
+            if(limit == 1000) {
+                sceneMenu();
+            }
         }
     }
 
